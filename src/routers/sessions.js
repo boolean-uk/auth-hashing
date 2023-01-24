@@ -25,10 +25,12 @@ router.post("/", async (req, res) => {
       return res.status(401).json({ error: "Invalid password!" });
 
     // TODO: CONTINUE BECAUSE PASS IS CORRECt
+    const secret = process.env.JWT_SECRET;
     // If the user exists and the passwords match, create a JWT containing the username in the payload
     // Use the JWT_SECRET environment variable for the secret key
+    const accessToken = jwt.sign(username, secret);
     // Send a JSON object with a "token" key back to the client, the value is the JWT created
-    res.status(200).json({ user: "USER OK" });
+    res.status(201).json({ accessToken: accessToken });
   });
 });
 
