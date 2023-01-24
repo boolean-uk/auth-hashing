@@ -26,9 +26,15 @@ router.post("/", async (req, res) => {
       delete newUser.password;
       // Respond back to the client with the created users username and id
       console.log("hashed pass deleted from newUser: ", newUser);
-      res.status(204).json({ user: newUser });
+      res.status(201).json({ user: newUser });
     } catch (error) {
-      res.status(500).json({ error: error.message, erro_code: error.code });
+      if (error.code === "P2002") {
+        res
+          .status(403)
+          .json({ error: `The username ${username} is already taken!` });
+      } else {
+        res.status(500).json({ error });
+      }
     }
   });
 });
