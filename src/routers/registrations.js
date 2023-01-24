@@ -31,8 +31,6 @@ router.post("/", async (req, res) => {
       res.status(500).json({ error: error.message, erro_code: error.code });
     }
   });
-
-  res.status(201).json({ user: undefined });
 });
 
 module.exports = router;
