@@ -12,9 +12,7 @@ router.post("/", async (req, res) => {
   const saltRounds = 10;
 
   bcrypt.hash(password, saltRounds, async (err, hashedPwd) => {
-    console.log("inside hash");
     try {
-      console.log("trying to create user");
       // Save the user using the prisma user model, setting their password to the hashed version
       const newUser = await prisma.user.create({
         data: {
@@ -25,7 +23,6 @@ router.post("/", async (req, res) => {
 
       delete newUser.password;
       // Respond back to the client with the created users username and id
-      console.log("hashed pass deleted from newUser: ", newUser);
       res.status(201).json({ user: newUser });
     } catch (error) {
       if (error.code === "P2002") {
