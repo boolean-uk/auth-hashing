@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/boolean-uk/auth-hashing#readme",
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.21"
   },
   "dependencies": {
     "@prisma/client": "^4.9.0",
