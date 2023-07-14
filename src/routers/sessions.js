@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const prisma = require('../utils/prisma.js')
 
+const secret = process.env.JWT_SECRET
+
 router.post('/', async (req, res) => {
     const { username, password } = req.body;
     // Get the username and password from the request body
@@ -16,10 +18,13 @@ router.post('/', async (req, res) => {
     })
 
     if (userCheck) {
-        bcrypt.compare(password, userCheck.password, function(err, res) {
-            console.log(res)
+        bcrypt.compare(password, userCheck.password, function(err, result) {
+            console.log(result)
+
+            const token = jwt.sign({username: username}, secret)
+
+            res.json({token})
         })
-        return res.status(201).send("correct username and password")
     } else {
         return res.status(401).send("incorrect username or password")
     }
