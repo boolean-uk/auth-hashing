@@ -15,12 +15,16 @@ router.post('/', async (req, res) => {
         },
     })
 
-    bcrypt.compare(password, userCheck.password, function(err, res) {
+    if (userCheck) {
+        bcrypt.compare(password, userCheck.password, function(err, res) {
+            console.log(res)
+        })
+        return res.status(201).send("correct username and password")
+    } else {
+        return res.status(401).send("incorrect username or password")
+    }
 
 
-    console.log(res)
-
-    })
 
     // Check that a user with that username exists in the database
 
