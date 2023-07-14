@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const prisma = require('../utils/prisma.js')
 
 router.post('/', async (req, res) => {
+  console.log(req.body)
   const { username, password } = req.body
 
   bcrypt.hash(password, saltRounds, function(err, hash) {
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
       }
     })
     .then((user) => {
-      return res.status(201).json({ user: { user: user.username, id: user.id } })
+      return res.status(201).json({ user: { user: user.username, id: user.id }, message: "new user created" })
     })
   });
 });
