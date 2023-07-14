@@ -11,15 +11,20 @@ router.post('/', async (req, res) => {
   const { username, password } = req.body
 
   bcrypt.hash(password, saltRounds, function(err, hash) {
-    prisma.user.create({
-      data: {
-        username,
-        password: hash
-      }
+    try {
+      prisma.user.create({
+        data: {
+          username,
+          password: hash
+        }
+      })
+      .then((user) => {
+          const token = jwt.sign(username, process.env.JWT_SECRET)
+          return res.status(201).json({ user: { user: user.username, id: user.id }, message: "new user created", token })
     })
-    .then((user) => {
-      return res.status(201).json({ user: { user: user.username, id: user.id }, message: "new user created" })
-    })
+    } catch (error) {
+        return res.status(401).json({  message: "user already exists"})
+    }
   });
 });
 
