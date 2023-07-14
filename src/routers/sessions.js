@@ -9,7 +9,21 @@ router.post('/', async (req, res) => {
     const { username, password } = req.body;
     // Get the username and password from the request body
 
+    const userCheck = await prisma.user.findUnique({
+        where: {
+            username: username
+        },
+    })
+
+    bcrypt.compare(password, userCheck.password, function(err, res) {
+
+
+    console.log(res)
+
+    })
+
     // Check that a user with that username exists in the database
+
     // Use bcrypt to check that the provided password matches the hashed password on the user
     // If either of these checks fail, respond with a 401 "Invalid username or password" error
 
