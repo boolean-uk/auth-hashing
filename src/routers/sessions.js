@@ -35,7 +35,6 @@ router.post("/", async (req, res) => {
       hasAccess(result);
     });
   }
-
 });
 
 module.exports = router;
