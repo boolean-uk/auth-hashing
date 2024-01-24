@@ -15,11 +15,11 @@ router.post("/", async (req, res) => {
     // Save the user using the prisma user model, setting their password to the hashed version
     const newUser = await prisma.user.create({
       data: {
-        username: username,
+        username,
         password: hashedPassword,
       },
     });
-
+    
     // Respond back to the client with the created user's username and id
     res
       .status(201)
