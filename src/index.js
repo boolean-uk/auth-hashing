@@ -1,20 +1,21 @@
 require('dotenv').config();
 
-const express = require('express');
-const cors = require('cors');
-const app = express();
+// const express = require('express');
+// const cors = require('cors');
+// const app = express();
 
-app.disable('x-powered-by');
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.disable('x-powered-by');
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
-const router = require('./router');
-app.use('/', router);
+// const router = require('./router');
+// app.use('/', router);
 
-app.get('*', (req, res) => {
-    res.json({ ok: true });
-});
+// app.get('*', (req, res) => {
+//     res.json({ ok: true });
+// });
+const app = require('./server.js')
 
 const port = process.env.PORT || 4000;
 
