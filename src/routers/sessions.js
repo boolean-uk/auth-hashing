@@ -8,15 +8,14 @@ const prisma = require("../utils/prisma.js");
 const secret = process.env.JWT_SECRET;
 
 router.post("/", async (req, res) => {
-  try {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
+  try {
     const user = await prisma.user.findUnique({
       where: {
         username: username,
       },
     });
-    console.log(user);
 
     if (!username) {
       return res.status(401).json({ error: "Invalid username or password" });

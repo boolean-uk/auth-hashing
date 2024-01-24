@@ -1,16 +1,29 @@
 const express = require("express");
 const router = express.Router();
+const { PrismaClientKnownRequestError } = require("@prisma/client");
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const prisma = require("../utils/prisma.js");
 
-// const secret = process.env.JWT_SECRET;
-
 router.post("/", async (req, res) => {
-  // Get the username and password from request body
   try {
     const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res
+        .status(406)
+        .json({ error: "Both username and password required" });
+    }
+
+    const existingUsername = await prisma.user.findUnique({
+      where: {
+        username: username,
+      },
+    });
+
+    if (existingUsername) {
+      return res.status(409).json({ error: "Username already exists" });
+    }
 
     // Hash the password: https://github.com/kelektiv/node.bcrypt.js#with-promises
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -26,7 +39,7 @@ router.post("/", async (req, res) => {
     // Respond back to the client with the created users username and id
     res.status(201).json({ user: { username: createUser.username } });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Internal Error" });
   }
 });
 
