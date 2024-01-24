@@ -9,7 +9,6 @@ let tempId = 1
 
 router.post('/', async (req, res) => {
     // Get the username and password from request body
-    console.log('RAN', req.body)
     const { username, password } = req.body
     
     // Hash the password: https://github.com/kelektiv/node.bcrypt.js#with-promises
@@ -20,7 +19,7 @@ router.post('/', async (req, res) => {
         data: {
             username: username,
             password: hashedPassword,
-            id: ++tempId
+            id: tempId++
         }
     })
 
