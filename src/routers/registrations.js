@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const prisma = require('../utils/prisma.js')
 
+const secret = process.env.JWT_SECRET
+
 // Global functions
 const checkUserExist = async (username) => {
   const foundUser = await prisma.user.findFirst({
@@ -37,14 +39,15 @@ const createUser = async (username, password) => {
 router.post('/', async (req, res) => {
   const { username, password } = req.body
 
-  // Hash the password: https://github.com/kelektiv/node.bcrypt.js#with-promises
   try {
     await checkUserExist(username)
 
     const hashPassword = await bcrypt.hash(password, 12)
     const savedUserData = await createUser(username, hashPassword)
 
-    res.status(201).json({ user: savedUserData })
+    const createdJwt = jwt.sign({ username: savedUserData.username }, secret)
+
+    res.status(201).json({ token: createdJwt })
   } catch (error) {
     res.status(error.status ?? 500).json({ error: error.message })
   }

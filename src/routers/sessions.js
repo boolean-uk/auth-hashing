@@ -53,14 +53,6 @@ router.post('/', async (req, res) => {
   } catch (error) {
     res.status(error.status ?? 500).json({ error: error.message })
   }
-
-  // Use bcrypt to check that the provided password matches the hashed password on the user
-  // If either of these checks fail, respond with a 401 "Invalid username or password" error
-
-  // If the user exists and the passwords match, create a JWT containing the username in the payload
-  // Use the JWT_SECRET environment variable for the secret key
-
-  // Send a JSON object with a "token" key back to the client, the value is the JWT created
 })
 
 module.exports = router
