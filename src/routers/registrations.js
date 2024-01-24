@@ -1,19 +1,53 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const prisma = require('../utils/prisma.js')
 
-router.post('/', async (req, res) => {
-    // Get the username and password from request body
-    
-    // Hash the password: https://github.com/kelektiv/node.bcrypt.js#with-promises
-    
-    // Save the user using the prisma user model, setting their password to the hashed version
-    
-    // Respond back to the client with the created users username and id
-    res.status(201).json({ user: undefined })
-});
+// Global functions
+const checkUserExist = async (username) => {
+  const foundUser = await prisma.user.findFirst({
+    where: {
+      username: username
+    }
+  })
 
-module.exports = router;
+  if (foundUser) {
+    const error = new Error('User with provided username already exist')
+    error.status = 409
+    throw error
+  }
+
+  return true
+}
+
+const createUser = async (username, password) => {
+  const createdUser = await prisma.user.create({
+    data: {
+      username: username,
+      password: password
+    }
+  })
+
+  return createdUser
+}
+
+// Routers
+router.post('/', async (req, res) => {
+  const { username, password } = req.body
+
+  // Hash the password: https://github.com/kelektiv/node.bcrypt.js#with-promises
+  try {
+    await checkUserExist(username)
+
+    const hashPassword = await bcrypt.hash(password, 12)
+    const savedUserData = await createUser(username, hashPassword)
+
+    res.status(201).json({ user: savedUserData })
+  } catch (error) {
+    res.status(error.status ?? 500).json({ error: error.message })
+  }
+})
+
+module.exports = router
