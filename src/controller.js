@@ -32,7 +32,6 @@ const loginUser = async (req, res) => {
         return
     }
     
-    console.log(foundUser.password)
     try {
         await bcrypt.compare(password, foundUser.password)
         const token = jwt.sign(username, process.env.SECRET)
