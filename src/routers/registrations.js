@@ -5,8 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const prisma = require('../utils/prisma.js')
 
-let tempId = 1
-
 router.post('/', async (req, res) => {
     // Get the username and password from request body
     const { username, password } = req.body
@@ -18,13 +16,12 @@ router.post('/', async (req, res) => {
     const user = await prisma.user.create({
         data: {
             username: username,
-            password: hashedPassword,
-            id: tempId++
+            password: hashedPassword
         }
     })
 
     // Respond back to the client with the created users username and id
-    res.status(201).json({ user: user.username, id: user.id})
+    res.status(201).json({ user: user.username })
 });
 
 module.exports = router;
