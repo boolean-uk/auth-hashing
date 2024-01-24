@@ -12,7 +12,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 const registrationsRouter = require('./routers/registrations.js')
+const loginRouter = require('./routers/login.js')
 
 app.use('/register', registrationsRouter)
+app.use('/login', loginRouter)
 
 module.exports = app

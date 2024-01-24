@@ -1,7 +1,4 @@
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const secret = process.env.JWT_SECRET
-
 const { findUserDb, createUserDb } = require('../domains/registrations.js')
 
 const registerUser = async (req, res) => {
