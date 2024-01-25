@@ -1,4 +1,14 @@
 const bcrypt = require('bcrypt');
-const hashString = (string) => bcrypt.hash(string)
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env
 
-const saltString = (string) => bcrypt.saltString(string)
+const hashString = (string) => bcrypt.hash(string, 12)
+
+const compareStrings = (string, encryptedstring) => bcrypt.compare(string, encryptedstring)
+
+const createToken = (username) => {
+  const payload  = { username }
+  return jwt.sign(payload, JWT_SECRET)
+}
+
+module.exports = { hashString, compareStrings, createToken }
