@@ -1,12 +1,45 @@
 const express = require('express');
 const router = express.Router();
-
+const secret = process.env.JWT_SECRET;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const prisma = require('../utils/prisma.js')
 
 router.post('/', async (req, res) => {
     const { username, password } = req.body;
+    
+    // Get the username and password from the request body
+
+    const session = async ()=>{
+        const user = await prisma.user.findUnique({
+            where: {
+                username: username
+            }
+        
+        })
+
+        const checkDetails = await bcrypt.compare(password, user.password)
+        if(!checkDetails){
+            res.status(401).json("Invalid username or password")
+        }
+        else{
+            const payload = {username:username}
+
+            const createToken = (payload, secret)=>{
+                const token = jwt.sign(payload, secret);
+                return token;
+            }
+
+            const generateToken = createToken(payload, secret)
+
+            res.json(generateToken)
+            console.log(generateToken)
+        }
+
+     
+    }
+
+    session()
     // Get the username and password from the request body
 
     // Check that a user with that username exists in the database
