@@ -29,7 +29,7 @@ async function loginUser(req, res) {
 
   const userToken = jwt.sign({ username: foundUser.username }, secret);
 
-  return res.status(201).send({ username: userToken });
+  return res.status(201).send({ token: userToken });
 }
 
 module.exports = {
