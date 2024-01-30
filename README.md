@@ -51,7 +51,7 @@ Two different users using the same password, but their hashes are completely dif
 5. Run `npm ci` to install dependencies.
 6. Run `npx prisma migrate dev` to execute the database migrations. Or `npx prisma migrate reset` to reset database and run all migrations - press `y` when it asks if you're sure.
 
-## Instructions
+## Instructionsnpm run
 
 In this exercise, you'll be [using the bcrypt package](https://www.npmjs.com/package/bcrypt) to hash a user's password upon account registration and then compare it during login.
 
