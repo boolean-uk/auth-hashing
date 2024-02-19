@@ -17,12 +17,18 @@ const loginUserDb = async (username, password) => {
 
   if (!getUser) res.status(409).json({ error: 'username or password incorrect' })
 
-  const hashedPassword = hashString(password)
+  const hashedPassword = await hashString(password)
 
   try {
-
+		const foundUser = await prisma.user.findUniqueOrThrow({
+      where: {
+        username,
+				password: hashedPassword
+      }
+    })
+    return foundUser
   } catch (error) {
-
+		return false
   }
 }
 
@@ -34,7 +40,6 @@ const getUserDb = async (username) => {
         username
       }
     })
-
     return foundUser
   } catch (error) {
 
