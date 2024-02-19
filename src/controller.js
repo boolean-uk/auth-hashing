@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { registerUserDb, loginUserDb, getUserDb } = require('./domain');
-const { hashString } = require('./utils');
+const { createToken } = require('./utils');
 
 const registerUser = async (req, res) => {
   const { username, password } = req.body
@@ -28,7 +28,8 @@ const loginUser = async (req, res) => {
 		return res.status(401).json({ error: "invalid login credentials" })
 	}
 
-	return res.status(200).json({ user })
+	const token = createToken(user.username)
+	return res.status(200).json({ token })
 }
 
 module.exports = { registerUser, loginUser }
