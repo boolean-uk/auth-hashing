@@ -24,7 +24,9 @@ const loginUser = async (req, res) => {
 
 	const user = await loginUserDb(username, password)
 
-	if (user === false) res.status(401).json({ error: "invalid login credentials" })
+	if (!user) {
+		return res.status(401).json({ error: "invalid login credentials" })
+	}
 
 	return res.status(200).json({ user })
 }
