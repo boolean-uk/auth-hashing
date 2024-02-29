@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const router = require('./router');
+const router = require('./server.js');
 app.use('/', router);
 
 app.get('*', (req, res) => {
